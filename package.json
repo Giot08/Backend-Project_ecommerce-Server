@@ -1,0 +1,33 @@
+{
+  "name": "node-backend-template",
+  "version": "1.0.0",
+  "description": "\"\"\"\r A template made for start new proyects, the principal\r idea is made a node backend template for quickstart \r my new proyects.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node dist/server.js",
+    "server": "nodemon dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Giot08/Node-backend-template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Giot08/Node-backend-template/issues"
+  },
+  "homepage": "https://github.com/Giot08/Node-backend-template#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.2",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "tslint": "^6.1.3",
+    "typescript": "^4.7.4"
+  }
+}
