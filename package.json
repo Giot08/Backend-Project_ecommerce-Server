@@ -4,6 +4,7 @@
   "description": "\"\"\"\r A template made for start new proyects, the principal\r idea is made a node backend template for quickstart \r my new proyects.",
   "main": "index.js",
   "scripts": {
+    "comp": "tsc --watch",
     "dev": "node dist/server.js",
     "server": "nodemon dist/server.js"
   },

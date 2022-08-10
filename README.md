@@ -30,3 +30,4 @@ $ npm i typescript --save-dev
 $ tsc --init
 $ cd ./node_modules/.bin/tslint --init
 $ npm i --save-dev @types/express
+$ tsc --watch
