@@ -23,48 +23,67 @@ export const postUser = async (req: Request, res: Response) => {
   const { body } = req;
 
   try {
-
     const findEmail = await User.findOne({
       where: {
         email: body.email,
-      }
+      },
     });
 
-    if(findEmail) {
+    if (findEmail) {
       return res.status(400).json({
         msg: "El correo ya existe." + body.email,
-      })
+      });
     }
-
-
 
     const user = await User.create(body);
     await user.save();
     res.json(user);
-
   } catch (error) {
     console.log(error);
     res.status(500).json({
       msg: "postUsers",
-      error
+      error,
     });
   }
 };
 
-export const putUser = (req: Request, res: Response) => {
-  const { body } = req;
+export const putUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  res.json({
-    msg: "putUsers",
-    body,
-    id,
-  });
+  const { body } = req;
+
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({
+        msg: "User not found",
+      });
+    }
+
+    await user.update(body);
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error, contact the administrator",
+    });
+  }
 };
 
-export const deleteUser = (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  res.json({
-    msg: "deleteUsers",
-    id,
-  });
+
+  const user = await User.findByPk(id);
+  if (!user) {
+    return res.status(404).json({
+      msg: "User not found",
+    });
+  } else {
+    await user.destroy();
+
+    res.status(200).json({
+      msg: "User deleted",
+    });
+  }
+
+  // State can be the has a update to show "false" has a reference for user existence
 };
