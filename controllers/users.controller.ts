@@ -23,9 +23,10 @@ export const postUser = async (req: Request, res: Response) => {
   const { body } = req;
 
   try {
-    const user = new User(body);
+    const user = await User.create(body);
     await user.save();
     res.json(user);
+
   } catch (error) {
     console.log(error);
     res.status(500).json({
