@@ -23,6 +23,21 @@ export const postUser = async (req: Request, res: Response) => {
   const { body } = req;
 
   try {
+
+    const findEmail = await User.findOne({
+      where: {
+        email: body.email,
+      }
+    });
+
+    if(findEmail) {
+      return res.status(400).json({
+        msg: "El correo ya existe." + body.email,
+      })
+    }
+
+
+
     const user = await User.create(body);
     await user.save();
     res.json(user);
@@ -31,6 +46,7 @@ export const postUser = async (req: Request, res: Response) => {
     console.log(error);
     res.status(500).json({
       msg: "postUsers",
+      error
     });
   }
 };
