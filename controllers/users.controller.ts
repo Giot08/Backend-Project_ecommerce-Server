@@ -1,7 +1,11 @@
+// Third
 import { Request, Response } from "express";
+const bcryptjs = require("bcryptjs");
+
+// Our
 import User from "../models/user.model";
 
-export const getUser = async (req: Request, res: Response) => {
+export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = await User.findByPk(id);
 
@@ -14,34 +18,40 @@ export const getUser = async (req: Request, res: Response) => {
   res.json(user);
 };
 
-export const getUsers = async (req: Request, res: Response) => {
+export const getAllUsers = async (req: Request, res: Response) => {
   const users = await User.findAll();
   res.json(users);
 };
 
-export const postUser = async (req: Request, res: Response) => {
+export const createNewUser = async (req: Request, res: Response) => {
   const { body } = req;
 
   try {
     const findEmail = await User.findOne({
       where: {
-        email: body.email,
+        email: body.email.toLowerCase(),
       },
     });
 
     if (findEmail) {
       return res.status(400).json({
-        msg: "El correo ya existe." + body.email,
+        msg: `The email ${body.email} already exists`,
       });
     }
 
+    const encryptPassword = bcryptjs.genSaltSync();
+    body.password = bcryptjs.hashSync(body.password, encryptPassword);
+
     const user = await User.create(body);
     await user.save();
-    res.json(user);
+
+    res.json({
+      msg: "User created successfully",
+      user,
+    });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
-      msg: "postUsers",
+      msg: "Error 500, Contact with administrator",
       error,
     });
   }

@@ -32,3 +32,4 @@ $ cd ./node_modules/.bin/tslint --init
 $ npm i --save-dev @types/express
 $ tsc --watch
 $ npm i --save-dev @types/cors
+$ npm i --save-dev @types/bcryptjs
