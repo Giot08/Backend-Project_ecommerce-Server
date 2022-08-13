@@ -1,7 +1,7 @@
 {
   "name": "node-backend-template",
   "version": "1.0.0",
-  "description": "\"\"\"\r A template made for start new proyects, the principal\r idea is made a node backend template for quickstart \r my new proyects.",
+  "description": "\r A template made for start new proyects, the principal\r idea is made a node backend template for quickstart \r my new proyects.",
   "main": "index.js",
   "scripts": {
     "comp": "tsc --watch",

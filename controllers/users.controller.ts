@@ -1,21 +1,25 @@
-// Third
 import { Request, Response } from "express";
 const bcryptjs = require("bcryptjs");
 
-// Our
 import User from "../models/user.model";
 
 export const getUserById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const user = await User.findByPk(id);
+  const { body } = req;
 
-  if (!user) {
+
+  const findUser = await User.findOne({
+    where: {
+      id: body.id
+    }
+  });
+
+  if (!findUser) {
     return res.status(404).json({
       message: "User not found",
     });
   }
 
-  res.json(user);
+  res.json(findUser);
 };
 
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -27,18 +31,26 @@ export const createNewUser = async (req: Request, res: Response) => {
   const { body } = req;
 
   try {
-    const findEmail = await User.findOne({
-      where: {
-        email: body.email.toLowerCase(),
-      },
+    const findUserByEmail = await User.findOne({
+      where:{
+        email: body.email
+      }
     });
-
-    if (findEmail) {
+    const findUserByID = await User.findOne({
+      where: {
+        id: body.id,
+      }
+    });
+  
+    if (findUserByEmail || findUserByID) {
       return res.status(400).json({
-        msg: `The email ${body.email} already exists`,
+        message: "User already exists",
       });
     }
 
+    // Gen ID
+
+    // Encrypt password
     const encryptPassword = bcryptjs.genSaltSync();
     body.password = bcryptjs.hashSync(body.password, encryptPassword);
 

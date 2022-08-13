@@ -7,7 +7,7 @@ class Server {
   private app: Application;
   private port: string;
   private paths = {
-    users: "/api/users",
+    users: "/api/user",
   };
 
   constructor() {
