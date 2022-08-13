@@ -44,11 +44,9 @@ export const createNewUser = async (req: Request, res: Response) => {
   
     if (findUserByEmail || findUserByID) {
       return res.status(400).json({
-        message: "User already exists",
+        message: `User already exists: ${body.id} || ${body.email} `,
       });
     }
-
-    // Gen ID
 
     // Encrypt password
     const encryptPassword = bcryptjs.genSaltSync();
