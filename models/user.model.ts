@@ -25,9 +25,12 @@ const User = db.define("user", {
   },
   state: {
     type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
   role: {
     type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "user_role",
   },
 });
 

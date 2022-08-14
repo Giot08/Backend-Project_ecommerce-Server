@@ -1,16 +1,18 @@
 import { Request, Response } from "express";
+import { customAlphabet } from "nanoid";
 const bcryptjs = require("bcryptjs");
+
+import { idKeys } from "../keys/id.keys";
 
 import User from "../models/user.model";
 
 export const getUserById = async (req: Request, res: Response) => {
   const { body } = req;
 
-
   const findUser = await User.findOne({
     where: {
-      id: body.id
-    }
+      id: body.id,
+    },
   });
 
   if (!findUser) {
@@ -30,18 +32,21 @@ export const getAllUsers = async (req: Request, res: Response) => {
 export const createNewUser = async (req: Request, res: Response) => {
   const { body } = req;
 
+  const nanoid = customAlphabet(idKeys, 8);
+  body.id = nanoid();
+
   try {
     const findUserByEmail = await User.findOne({
-      where:{
-        email: body.email
-      }
+      where: {
+        email: body.email,
+      },
     });
     const findUserByID = await User.findOne({
       where: {
         id: body.id,
-      }
+      },
     });
-  
+
     if (findUserByEmail || findUserByID) {
       return res.status(400).json({
         message: `User already exists: ${body.id} || ${body.email} `,
