@@ -13,7 +13,7 @@ export const getUserById = async (req: Request, res: Response) => {
     where: {
       id: body.id,
     },
-  });
+  }); 
 
   if (!findUser) {
     return res.status(404).json({
@@ -53,7 +53,6 @@ export const createNewUser = async (req: Request, res: Response) => {
       });
     }
 
-    // Encrypt password
     const encryptPassword = bcryptjs.genSaltSync();
     body.password = bcryptjs.hashSync(body.password, encryptPassword);
 
@@ -109,6 +108,4 @@ export const deleteUser = async (req: Request, res: Response) => {
       msg: "User deleted",
     });
   }
-
-  // State can be the has a update to show "false" has a reference for user existence
 };
