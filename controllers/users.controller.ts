@@ -1,27 +1,20 @@
 import { Request, Response } from "express";
 import { customAlphabet } from "nanoid";
-const bcryptjs = require("bcryptjs");
+import bcryptjs from "bcryptjs";
 
 import { idKeys } from "../keys/id.keys";
-
 import User from "../models/user.model";
 
 export const getUserById = async (req: Request, res: Response) => {
-  const { body } = req;
-
-  const findUser = await User.findOne({
-    where: {
-      id: body.id,
-    },
-  }); 
-
-  if (!findUser) {
+  const { id } = req.params;
+  const user = await User.findByPk(id);
+  if (!user) {
     return res.status(404).json({
-      message: "User not found",
+      msg: "User not found",
+      id,
     });
   }
-
-  res.json(findUser);
+  res.json({ user, id });
 };
 
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -95,17 +88,16 @@ export const putUser = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-
   const user = await User.findByPk(id);
   if (!user) {
     return res.status(404).json({
       msg: "User not found",
     });
-  } else {
-    await user.destroy();
-
-    res.status(200).json({
-      msg: "User deleted",
-    });
   }
+  // await user.destroy();
+
+  res.status(200).json(
+    user
+    // {      msg: "User deleted",    }
+  );
 };
