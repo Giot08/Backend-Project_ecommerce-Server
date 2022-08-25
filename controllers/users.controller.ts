@@ -46,8 +46,15 @@ export const createNewUser = async (req: Request, res: Response) => {
       });
     }
 
+    
+    const validPass = body.password.length > 7 ? true : false
+    if(!validPass) return res.status(400).json({msg: "password length too short!"})
+
+    console.log(validPass)
+
+
     const encryptPassword = bcryptjs.genSaltSync();
-    body.password = bcryptjs.hashSync(body.password, encryptPassword);
+    body.password = bcryptjs.hashSync(body.password, encryptPassword)
 
     const user = await User.create(body);
     await user.save();
