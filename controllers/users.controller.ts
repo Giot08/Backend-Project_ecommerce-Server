@@ -46,15 +46,14 @@ export const createNewUser = async (req: Request, res: Response) => {
       });
     }
 
-    
-    const validPass = body.password.length > 7 ? true : false
-    if(!validPass) return res.status(400).json({msg: "password length too short!"})
+    const validPass = body.password.length > 7 ? true : false;
+    if (!validPass)
+      return res.status(400).json({ msg: "password length too short!" });
 
-    console.log(validPass)
-
+    console.log(validPass);
 
     const encryptPassword = bcryptjs.genSaltSync();
-    body.password = bcryptjs.hashSync(body.password, encryptPassword)
+    body.password = bcryptjs.hashSync(body.password, encryptPassword);
 
     const user = await User.create(body);
     await user.save();
@@ -73,15 +72,34 @@ export const createNewUser = async (req: Request, res: Response) => {
 
 export const putUser = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const user = await User.findByPk(id);
+
   const { body } = req;
+  const { name, lastname, email } = body;
 
   try {
-    const user = await User.findByPk(id);
     if (!user) {
       return res.status(404).json({
         msg: "User not found",
       });
     }
+    if (name === "" || lastname === "" || email === "")
+      return res.status(400).json({ msg: "Todos los campos son requeridos" });
+
+
+      const findUserByEmail = await User.findOne({
+        where: {
+          email: body.email,
+        },
+      });  
+
+
+ // Aca quedamos!
+      console.log(user.dataValues.name)
+
+      
+
+
 
     await user.update(body);
 
