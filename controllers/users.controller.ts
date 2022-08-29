@@ -83,24 +83,8 @@ export const putUser = async (req: Request, res: Response) => {
         msg: "User not found",
       });
     }
-    if (name === "" || lastname === "" || email === "")
+    if (name === "" || lastname === "")
       return res.status(400).json({ msg: "Todos los campos son requeridos" });
-
-
-      const findUserByEmail = await User.findOne({
-        where: {
-          email: body.email,
-        },
-      });  
-
-
- // Aca quedamos!
-      console.log(user.dataValues.name)
-
-      
-
-
-
     await user.update(body);
 
     res.json(user);
