@@ -75,7 +75,7 @@ export const putUser = async (req: Request, res: Response) => {
   const user = await User.findByPk(id);
 
   const { body } = req;
-  const { name, lastname, email } = body;
+  const { name, lastname } = body;
 
   try {
     if (!user) {
@@ -106,7 +106,6 @@ export const deleteUser = async (req: Request, res: Response) => {
   // await user.destroy();
 
   res.status(200).json(
-    user
-    // {      msg: "User deleted",    }
+    user,
   );
 };

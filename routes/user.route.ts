@@ -1,6 +1,4 @@
 import { Router } from "express";
-
-// controllers
 import {
   getAllUsers,
   getUserById,
