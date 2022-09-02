@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { validFields } from '../middlewares/validators';
+import { validFields, validRoles } from "../middlewares/validators";
 import {
   getAllUsers,
   getUserById,
   createNewUser,
   putUser,
   deleteUser,
-  getAllRoles
+  getAllRoles,
 } from "../controllers/users.controller";
 import Role from "../models/role.model";
 
@@ -24,13 +24,9 @@ router.post(
     check("email", "El correo no es valido").isEmail(),
     check("password", "El password esta vacio").not().isEmpty(),
     check("password", "El password debe tener al menos 8 caracteres").isLength({
-      min: 8}),
-      check('role').custom(async(role) => {
-        const validRole = await Role.findByPk(role)
-        if(!validRole){
-          throw new Error("Rol no valido")
-        }
-      }),
+      min: 8,
+    }),
+    check("role").custom(validRoles),
     validFields,
   ],
   createNewUser
