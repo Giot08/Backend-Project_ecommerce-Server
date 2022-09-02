@@ -9,7 +9,6 @@ import {
   deleteUser,
   getAllRoles,
 } from "../controllers/users.controller";
-import Role from "../models/role.model";
 
 const router = Router();
 

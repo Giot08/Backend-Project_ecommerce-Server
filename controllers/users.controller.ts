@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { customAlphabet } from "nanoid";
 import bcryptjs from "bcryptjs";
 
-import { idKeys } from "../keys/id.keys";
+import { idKeys } from "../keys/idKeys";
 import User from "../models/user.model";
 import Role from "../models/role.model";
 
