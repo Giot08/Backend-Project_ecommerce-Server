@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { validFields, validRoles } from "../middlewares/validators";
+import { validFields, validRoles, validEmailExists } from "../middlewares/validators";
 import {
   getAllUsers,
   getUserById,
@@ -13,10 +13,9 @@ import {
 const router = Router();
 
 router.get("/roles", getAllRoles);
+router.get("/id/:id", getUserById);
 router.get("/all", getAllUsers);
-router.get("/:id", getUserById);
-router.post(
-  "/",
+router.post("/",
   [
     check("name", "El nombre esta vacio").not().isEmpty(),
     check("lastname", "El apellido esta vacio").not().isEmpty(),
@@ -26,6 +25,7 @@ router.post(
       min: 8,
     }),
     check("role").custom(validRoles),
+    check("email").custom(validEmailExists),
     validFields,
   ],
   createNewUser

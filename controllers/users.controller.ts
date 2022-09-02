@@ -11,7 +11,6 @@ export const getAllRoles = async (req: Request, res: Response) => {
   res.json(roles);
 };
 
-
 export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = await User.findByPk(id);
@@ -20,7 +19,7 @@ export const getUserById = async (req: Request, res: Response) => {
       msg: "User not found",
     });
   }
-  res.json({ user, id });
+  res.json(user);
 };
 
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -30,30 +29,14 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
 export const createNewUser = async (req: Request, res: Response) => {
   const { body } = req;
+  
   const nanoid = customAlphabet(idKeys, 8);
   body.id = nanoid();
+  body.email = body.email.toLowerCase();
 
   try {
-    const findUserByEmail = await User.findOne({
-      where: {
-        email: body.email,
-      },
-    });
-    const findUserByID = await User.findOne({
-      where: {
-        id: body.id,
-      },
-    });
-
-    if (findUserByEmail || findUserByID) {
-      return res.status(400).json({
-        message: `User already exists: ${body.id} || ${body.email} `,
-      });
-    }
-
     const encryptPassword = bcryptjs.genSaltSync();
     body.password = bcryptjs.hashSync(body.password, encryptPassword);
-
     const user = await User.create(body);
     await user.save();
 
