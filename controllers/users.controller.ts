@@ -4,6 +4,7 @@ import bcryptjs from "bcryptjs";
 
 import { idKeys } from "../keys/id.keys";
 import User from "../models/user.model";
+import {validationResult} from "express-validator"
 
 export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -11,7 +12,6 @@ export const getUserById = async (req: Request, res: Response) => {
   if (!user) {
     return res.status(404).json({
       msg: "User not found",
-      id,
     });
   }
   res.json({ user, id });
@@ -24,7 +24,6 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
 export const createNewUser = async (req: Request, res: Response) => {
   const { body } = req;
-
   const nanoid = customAlphabet(idKeys, 8);
   body.id = nanoid();
 
@@ -45,12 +44,6 @@ export const createNewUser = async (req: Request, res: Response) => {
         message: `User already exists: ${body.id} || ${body.email} `,
       });
     }
-
-    const validPass = body.password.length > 7 ? true : false;
-    if (!validPass)
-      return res.status(400).json({ msg: "password length too short!" });
-
-    console.log(validPass);
 
     const encryptPassword = bcryptjs.genSaltSync();
     body.password = bcryptjs.hashSync(body.password, encryptPassword);
@@ -73,9 +66,7 @@ export const createNewUser = async (req: Request, res: Response) => {
 export const putUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = await User.findByPk(id);
-
   const { body } = req;
-  const { name, lastname } = body;
 
   try {
     if (!user) {
@@ -83,11 +74,9 @@ export const putUser = async (req: Request, res: Response) => {
         msg: "User not found",
       });
     }
-    if (name === "" || lastname === "")
-      return res.status(400).json({ msg: "Todos los campos son requeridos" });
     await user.update(body);
-
     res.json(user);
+
   } catch (error) {
     res.status(500).json({
       msg: "Internal server error, contact the administrator",
