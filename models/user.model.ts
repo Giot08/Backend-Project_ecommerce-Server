@@ -2,10 +2,10 @@ import { DataTypes } from "sequelize";
 import db from "../db/connection";
 
 const User = db.define("user", {
-  id:{
+  id: {
     type: DataTypes.STRING,
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
   },
   name: {
     type: DataTypes.STRING,
@@ -22,6 +22,9 @@ const User = db.define("user", {
   password: {
     type: DataTypes.STRING,
     allowNull: false,
+    get() {
+      return undefined;
+    }
   },
   state: {
     type: DataTypes.BOOLEAN,
@@ -32,6 +35,7 @@ const User = db.define("user", {
     allowNull: false,
     defaultValue: "user_role",
   },
-});
+}
+);
 
 export default User;
