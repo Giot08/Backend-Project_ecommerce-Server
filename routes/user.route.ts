@@ -29,12 +29,23 @@ router.post("/",
     validFields,
   ],
   createNewUser
+  );
+  router.put(
+    "/update/:id",
+    [
+      check("name", "El nombre esta vacio").not().isEmpty(),
+      check("lastname", "El apellido esta vacio").not().isEmpty(),
+      check("email", "No se puede enviar el email").isEmpty(),
+      validFields,
+  ],
+  putUser
 );
-router.put(
-  "/:id",
-  [
-    check("name", "El nombre esta vacio").not().isEmpty(),
-    check("lastname", "El apellido esta vacio").not().isEmpty(),
+  router.put(
+    "/email/:id",
+    [
+      check("email", "No es un correo valido").isEmail(),
+      check("email").custom(validEmailExists),
+      validFields,
   ],
   putUser
 );
