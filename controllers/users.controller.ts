@@ -4,7 +4,13 @@ import bcryptjs from "bcryptjs";
 
 import { idKeys } from "../keys/id.keys";
 import User from "../models/user.model";
-import {validationResult} from "express-validator"
+import Role from "../models/role.model";
+
+export const getAllRoles = async (req: Request, res: Response) => {
+  const roles = await Role.findAll();
+  res.json(roles);
+};
+
 
 export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;

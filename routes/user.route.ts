@@ -7,10 +7,13 @@ import {
   createNewUser,
   putUser,
   deleteUser,
+  getAllRoles
 } from "../controllers/users.controller";
+import Role from "../models/role.model";
 
 const router = Router();
 
+router.get("/roles", getAllRoles);
 router.get("/all", getAllUsers);
 router.get("/:id", getUserById);
 router.post(
@@ -22,6 +25,12 @@ router.post(
     check("password", "El password esta vacio").not().isEmpty(),
     check("password", "El password debe tener al menos 8 caracteres").isLength({
       min: 8}),
+      check('role').custom(async(role) => {
+        const validRole = await Role.findByPk(role)
+        if(!validRole){
+          throw new Error("Rol no valido")
+        }
+      }),
     validFields,
   ],
   createNewUser
