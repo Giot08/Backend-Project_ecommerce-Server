@@ -23,8 +23,13 @@ export const getUserById = async (req: Request, res: Response) => {
 };
 
 export const getAllUsers = async (req: Request, res: Response) => {
-  const users = await User.findAll();
-  res.json(users);
+  const users = await User.findAll({
+    where: {
+      state: true,
+    },
+  });
+  const totalUsers = users.length;
+  res.json({ totalUsers, users });
 };
 
 export const createNewUser = async (req: Request, res: Response) => {
@@ -90,7 +95,26 @@ export const putUserEmail = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const removeUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const user = await User.findByPk(id);
+  const { body } = req;
+  body.state = false;
+  if (!user) {
+    return res.status(404).json({
+      msg: "User not found",
+    });
+  }
+  try {
+    await user.update(body);
+    res.json({ msg: "User removed successfully", user });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error, contact the administrator",
+    });
+  }
+};
+export const destroyUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = await User.findByPk(id);
   if (!user) {
@@ -98,9 +122,6 @@ export const deleteUser = async (req: Request, res: Response) => {
       msg: "User not found",
     });
   }
-  // await user.destroy();
-
-  res.status(200).json(
-    user,
-  );
+  await user.destroy();
+  res.status(200).json({ user, msg: "User deleted successfully" });
 };

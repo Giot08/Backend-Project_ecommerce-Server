@@ -1,13 +1,18 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { validFields, validRoles, validEmailExists } from "../middlewares/validators";
+import {
+  validFields,
+  validRoles,
+  validEmailExists,
+} from "../middlewares/validators";
 import {
   getAllUsers,
   getUserById,
   createNewUser,
   putUser,
-  deleteUser,
+  removeUser,
   getAllRoles,
+  destroyUser,
 } from "../controllers/users.controller";
 
 const router = Router();
@@ -15,7 +20,8 @@ const router = Router();
 router.get("/roles", getAllRoles);
 router.get("/id/:id", getUserById);
 router.get("/all", getAllUsers);
-router.post("/",
+router.post(
+  "/",
   [
     check("name", "El nombre esta vacio").not().isEmpty(),
     check("lastname", "El apellido esta vacio").not().isEmpty(),
@@ -29,26 +35,30 @@ router.post("/",
     validFields,
   ],
   createNewUser
-  );
-  router.put(
-    "/update/:id",
-    [
-      check("name", "El nombre esta vacio").not().isEmpty(),
-      check("lastname", "El apellido esta vacio").not().isEmpty(),
-      check("email", "No se puede enviar el email").isEmpty(),
-      validFields,
+);
+router.put(
+  "/update/:id",
+  [
+    check("name", "El nombre esta vacio").not().isEmpty(),
+    check("lastname", "El apellido esta vacio").not().isEmpty(),
+    check("email", "No se puede enviar el email").isEmpty(),
+    validFields,
   ],
   putUser
 );
-  router.put(
-    "/email/:id",
-    [
-      check("email", "No es un correo valido").isEmail(),
-      check("email").custom(validEmailExists),
-      validFields,
+router.put(
+  "/email/:id",
+  [
+    check("email", "No es un correo valido").isEmail(),
+    check("email").custom(validEmailExists),
+    validFields,
   ],
   putUser
 );
-router.delete("/:id", deleteUser);
+router.put(
+  "/remove/:id",
+  removeUser
+);
+router.delete("/destroy/:id", destroyUser);
 
 export default router;
