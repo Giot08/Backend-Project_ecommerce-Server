@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import Role from "../models/role.model";
-import User from "../models/user.model";
+import { User, UserModel } from "../models/user.model";
 
 export const validFields = (
   req: Request,
@@ -39,11 +39,6 @@ export const validJWT = async (
   res: Response,
   next: NextFunction
 ) => {
-  interface User {
-    id: string;
-    password: string;
-    state: boolean;
-  }
   const { id } = req.params;
   const token = req.header("x-token");
 
@@ -54,7 +49,7 @@ export const validJWT = async (
   }
   try {
     const { uid } = jwt.verify(token, process.env.SECRET_JWT_KEY || "");
-    const user: User = await User.findByPk(uid);
+    const user: UserModel = await User.findByPk(uid);
     if (user.role !== "admin_role") {
       return res
         .status(401)
