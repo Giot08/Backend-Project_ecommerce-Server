@@ -4,6 +4,7 @@ import {
   validFields,
   validRoles,
   validEmailExists,
+  validJWT,
 } from "../middlewares/validators";
 import {
   getAllUsers,
@@ -55,10 +56,7 @@ router.put(
   ],
   putUser
 );
-router.put(
-  "/remove/:id",
-  removeUser
-);
+router.put("/remove/:id", [validJWT], removeUser);
 router.delete("/destroy/:id", destroyUser);
 
 export default router;
