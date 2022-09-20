@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, json } from "sequelize";
 import db from "../db/connection";
 
 const User = db.define("user", {
@@ -22,9 +22,9 @@ const User = db.define("user", {
   password: {
     type: DataTypes.STRING,
     allowNull: false,
-    get() {
-      return undefined;
-    }
+    // get() {
+    //   return undefined;  // Passwords dont go through to compare with hashSync
+    // }
   },
   state: {
     type: DataTypes.BOOLEAN,
@@ -35,7 +35,6 @@ const User = db.define("user", {
     allowNull: false,
     defaultValue: "user_role",
   },
-}
-);
+});
 
 export default User;

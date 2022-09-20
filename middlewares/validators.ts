@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { validationResult, check } from "express-validator";
+import { validationResult } from "express-validator";
+import jwt from "express-jwt";
 import Role from "../models/role.model";
 import User from "../models/user.model";
 
@@ -32,4 +33,7 @@ export const validEmailExists = async (email: string) => {
   if (validEmail) {
     throw new Error("Email already exists");
   }
+};
+export const validJWT = async (email: string) => {
+  
 };

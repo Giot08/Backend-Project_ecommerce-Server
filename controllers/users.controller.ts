@@ -19,7 +19,7 @@ export const getUserById = async (req: Request, res: Response) => {
       msg: "User not found",
     });
   }
-  res.json(user);
+  res.json(user); // No debe devolver contraseña
 };
 
 export const getAllUsers = async (req: Request, res: Response) => {
