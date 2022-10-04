@@ -76,7 +76,7 @@ export const putUser = async (req: Request, res: Response) => {
 };
 
 export const putUserEmail = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.header('id');
   const user = await User.findByPk(id);
   const { body } = req;
 

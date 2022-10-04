@@ -6,12 +6,14 @@ import {
   validEmailExists,
   validAdminRole,
   validJWT,
+  validUser,
 } from "../middlewares/validators";
 import {
   getAllUsers,
   getUserById,
   createNewUser,
   putUser,
+  putUserEmail,
   removeUser,
   getAllRoles,
   destroyUser,
@@ -19,9 +21,9 @@ import {
 
 const router = Router();
 
-router.get("/roles", [validAdminRole], getAllRoles);
-router.get("/id/:id", [validAdminRole], getUserById);
-router.get("/all", [validAdminRole], getAllUsers);
+router.get("/roles", [validJWT, validUser, validAdminRole, validFields], getAllRoles);
+router.get("/id/:id", [validJWT, validUser, validAdminRole, validFields], getUserById);
+router.get("/all", [validJWT, validUser, validAdminRole, validFields], getAllUsers);
 router.post(
   "/",
   [
@@ -44,18 +46,22 @@ router.put(
     check("name", "El nombre esta vacio").not().isEmpty(),
     check("lastname", "El apellido esta vacio").not().isEmpty(),
     check("email", "No se puede enviar el email").isEmpty(),
+    validJWT,
+    validUser,
     validFields,
   ],
   putUser
 );
 router.put(
-  "/email/:id",
+  "/email/",
   [
     check("email", "No es un correo valido").isEmail(),
     check("email").custom(validEmailExists),
+    validJWT,
+    validUser,
     validFields,
   ],
-  putUser
+  putUserEmail
 );
 router.put("/remove/:id", [validJWT], removeUser);
 router.delete("/destroy/:id", destroyUser);
