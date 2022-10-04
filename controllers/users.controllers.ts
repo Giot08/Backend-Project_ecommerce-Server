@@ -3,7 +3,7 @@ import { customAlphabet } from "nanoid";
 import bcryptjs from "bcryptjs";
 
 import { idKeys } from "../keys/idKeys";
-import User from "../models/user.model";
+import { User } from "../models/user.model";
 import Role from "../models/role.model";
 
 export const getAllRoles = async (req: Request, res: Response) => {

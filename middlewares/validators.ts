@@ -34,6 +34,25 @@ export const validEmailExists = async (email: string) => {
     throw new Error("Email already exists");
   }
 };
+
+export const validAdminRole = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const id = req.header("id");
+  const token = req.header("tkn");
+  const { uid } = jwt.verify(token, process.env.SECRET_JWT_KEY || "");
+
+  if (!id || !token)
+    return res.status(404).json({ msg: "token or id not found" });
+  if (id !== uid) return res.status(400).json({ msg: "Invalid info" });
+  const user: UserModel = await User.findByPk(uid || id);
+  if (user.role !== "admin_role")
+    return res.status(401).json({ msg: "Unauthorized" });
+  next();
+};
+
 export const validJWT = async (
   req: Request,
   res: Response,
@@ -51,9 +70,7 @@ export const validJWT = async (
     const { uid } = jwt.verify(token, process.env.SECRET_JWT_KEY || "");
     const user: UserModel = await User.findByPk(uid);
     if (user.role !== "admin_role") {
-      return res
-        .status(401)
-        .json({ msg: "Usuario no autorizado" });
+      return res.status(401).json({ msg: "Usuario no autorizado" });
     }
     if (id !== uid) {
       return res

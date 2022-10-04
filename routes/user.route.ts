@@ -4,6 +4,7 @@ import {
   validFields,
   validRoles,
   validEmailExists,
+  validAdminRole,
   validJWT,
 } from "../middlewares/validators";
 import {
@@ -14,13 +15,13 @@ import {
   removeUser,
   getAllRoles,
   destroyUser,
-} from "../controllers/users.controller";
+} from "../controllers/users.controllers";
 
 const router = Router();
 
-router.get("/roles", getAllRoles);
-router.get("/id/:id", getUserById);
-router.get("/all", getAllUsers);
+router.get("/roles", [validAdminRole], getAllRoles);
+router.get("/id/:id", [validAdminRole], getUserById);
+router.get("/all", [validAdminRole], getAllUsers);
 router.post(
   "/",
   [
