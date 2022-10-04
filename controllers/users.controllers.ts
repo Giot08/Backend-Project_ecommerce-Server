@@ -7,29 +7,47 @@ import { User } from "../models/user.model";
 import Role from "../models/role.model";
 
 export const getAllRoles = async (req: Request, res: Response) => {
-  const roles = await Role.findAll();
-  res.json(roles);
+  try {
+    const roles = await Role.findAll();
+    res.json(roles);
+  } catch (error) {
+    return res.status(500).json({
+      msg: "Internal server error, contact the administrator, error: " + error,
+    });
+  }
 };
 
 export const getUserById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const user = await User.findByPk(id);
-  if (!user) {
-    return res.status(404).json({
-      msg: "User not found",
+  try {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({
+        msg: "User not found",
+      });
+    }
+    res.json(user); // No debe devolver contraseña
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error, contact the administrator, error: " + error,
     });
   }
-  res.json(user); // No debe devolver contraseña
 };
 
 export const getAllUsers = async (req: Request, res: Response) => {
-  const users = await User.findAll({
-    where: {
-      state: true,
-    },
-  });
-  const totalUsers = users.length;
-  res.json({ totalUsers, users });
+  try {
+    const users = await User.findAll({
+      where: {
+        state: true,
+      },
+    });
+    const totalUsers = users.length;
+    res.json({ totalUsers, users });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error, contact the administrator, error: " + error,
+    });
+  }
 };
 
 export const createNewUser = async (req: Request, res: Response) => {
@@ -49,8 +67,7 @@ export const createNewUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({
-      msg: "Error 500, Contact with administrator",
-      error,
+      msg: "Internal server error, contact the administrator, error: " + error,
     });
   }
 };
@@ -70,13 +87,13 @@ export const putUser = async (req: Request, res: Response) => {
     res.json(user);
   } catch (error) {
     res.status(500).json({
-      msg: "Internal server error, contact the administrator",
+      msg: "Internal server error, contact the administrator, error: " + error,
     });
   }
 };
 
 export const putUserEmail = async (req: Request, res: Response) => {
-  const id = req.header('id');
+  const id = req.header("id");
   const user = await User.findByPk(id);
   const { body } = req;
 
@@ -90,13 +107,13 @@ export const putUserEmail = async (req: Request, res: Response) => {
     res.json(user);
   } catch (error) {
     res.status(500).json({
-      msg: "Internal server error, contact the administrator",
+      msg: "Internal server error, contact the administrator, error: " + error,
     });
   }
 };
 
 export const removeUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.header("id");
   const user = await User.findByPk(id);
   const { body } = req;
   body.state = false;
@@ -110,18 +127,24 @@ export const removeUser = async (req: Request, res: Response) => {
     res.json({ msg: "User removed successfully", user });
   } catch (error) {
     res.status(500).json({
-      msg: "Internal server error, contact the administrator",
+      msg: "Internal server error, contact the administrator, error: " + error,
     });
   }
 };
 export const destroyUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = await User.findByPk(id);
-  if (!user) {
-    return res.status(404).json({
-      msg: "User not found",
+  try {
+    if (!user) {
+      return res.status(404).json({
+        msg: "User not found",
+      });
+    }
+    await user.destroy();
+    res.status(200).json({ user, msg: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error, contact the administrator, error: " + error,
     });
   }
-  await user.destroy();
-  res.status(200).json({ user, msg: "User deleted successfully" });
 };

@@ -63,7 +63,7 @@ router.put(
   ],
   putUserEmail
 );
-router.put("/remove/:id", [validJWT], removeUser);
-router.delete("/destroy/:id", destroyUser);
+router.put("/remove/", [validJWT, validUser, validFields], removeUser);
+router.delete("/destroy/:id",[validAdminRole, validFields], destroyUser);
 
 export default router;

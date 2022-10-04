@@ -62,7 +62,7 @@ export const validUser = async (
     const token = req.header("tkn");
     const { uid } = jwt.verify(token, process.env.SECRET_JWT_KEY || "");
 
-    if (!id || !token) return res.status(404).json({ msg: "token or id not found" +id +token });
+    if (!id || !token) return res.status(404).json({ msg: "token or id not found"});
     if (id !== uid) return res.status(400).json({ msg: "Invalid info" });
     const user = await User.findByPk(id);
     if (!user) return res.status(404).json({ msg: "User not found" });
