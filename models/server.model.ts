@@ -32,7 +32,7 @@ class Server {
       await db.authenticate();
       console.log("Connection has been established successfully.");
     } catch (error) {
-      console.log(error);
+      return console.log(error);
     }
   }
 

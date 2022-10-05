@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
-const generateJWT = (uid: string) => {
+const generateJWT = (uid: string, email: string, name: string) => {
   return new Promise((resolve, reject) => {
-    const payload = { uid };
+    const payload = { uid, email, name }; //Por ver el estado en que se quede este token
 
     jwt.sign(payload, process.env.SECRET_JWT_KEY || '', {
         expiresIn: '4h'

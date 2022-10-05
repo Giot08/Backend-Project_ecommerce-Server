@@ -21,9 +21,9 @@ import {
 
 const router = Router();
 
-router.get("/roles", [validJWT, validUser, validAdminRole, validFields], getAllRoles);
-router.get("/id/:id", [validJWT, validUser, validAdminRole, validFields], getUserById);
-router.get("/all", [validJWT, validUser, validAdminRole, validFields], getAllUsers);
+router.get("/roles", [validJWT, validUser, validAdminRole], getAllRoles);
+router.get("/id/:id", [validJWT, validUser, validAdminRole], getUserById);
+router.get("/all", [validJWT, validUser, validAdminRole], getAllUsers);
 router.post(
   "/",
   [
@@ -48,7 +48,6 @@ router.put(
     check("email", "No se puede enviar el email").isEmpty(),
     validJWT,
     validUser,
-    validFields,
   ],
   putUser
 );
@@ -63,7 +62,7 @@ router.put(
   ],
   putUserEmail
 );
-router.put("/remove/", [validJWT, validUser, validFields], removeUser);
-router.delete("/destroy/:id",[validAdminRole, validFields], destroyUser);
+router.put("/remove/", [validJWT, validUser], removeUser);
+router.delete("/destroy/:id",[validJWT, validUser, validAdminRole], destroyUser);
 
 export default router;
