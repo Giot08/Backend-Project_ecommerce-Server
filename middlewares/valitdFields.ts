@@ -45,12 +45,11 @@ export const validJWT = async (
     return res.status(404).json({ msg: "Token not found" });
   }
   try {
-    jwt.verify(token, process.env.SECRET_JWT_KEY || "");
     next();
   } catch (error) {
     console.log(error);
     res.status(401).json({
-      msg: "Error: " + error + "Token no valido",
+      msg: "Error: " + error + " Token no valido",
     });
   }
 };

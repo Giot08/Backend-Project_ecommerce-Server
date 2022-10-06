@@ -18,13 +18,12 @@ export const login = async (req: Request, res: Response) => {
     if (!validPassword) {
       return res.status(404).json({ message: "Invalid password." });
     }
-    const token = await generateJWT(user.id, user.email, user.name); 
+    const token = await generateJWT(user.id); 
     res.json({
       user: user,
       tkn: token
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ error: error });
+     res.status(500).json({ error: "Server error: " + error });
   }
 };

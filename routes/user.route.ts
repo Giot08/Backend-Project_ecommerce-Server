@@ -43,10 +43,10 @@ router.post(
 router.put(
   "/update/:id",
   [
+    validJWT,
     check("name", "El nombre esta vacio").not().isEmpty(),
     check("lastname", "El apellido esta vacio").not().isEmpty(),
     check("email", "No se puede enviar el email").isEmpty(),
-    validJWT,
     validUser,
   ],
   putUser
@@ -54,9 +54,9 @@ router.put(
 router.put(
   "/email/",
   [
+    validJWT,
     check("email", "No es un correo valido").isEmail(),
     check("email").custom(validEmailExists),
-    validJWT,
     validUser,
     validFields,
   ],
