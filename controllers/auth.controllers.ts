@@ -6,12 +6,12 @@ import generateJWT from "../helpers/generateJWT";
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
-    const user: UserModel | any = await User.findOne({ //ignore errors
+    const user: UserModel | any = await User.findOne({
       where: {
         email: email,
       },
     });
-    if (!user) {
+    if (!user || user && user.state === false) {
       return res.status(404).json({ message: "User not found." });
     }
     const validPassword = bcryptjs.compareSync(password, user.password);

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import Role from "../models/role.model";
-import { User, UserModel } from "../models/user.model";
+import { User, UserModel } from '../models/user.model';
 
 export const validFields = (
   req: Request,
@@ -25,12 +25,13 @@ export const validRoles = async (role: string) => {
 
 export const validEmailExists = async (email: string) => {
   email = email.toLowerCase();
-  const validEmail = await User.findOne({
+  const user: UserModel |any = await User.findOne({
     where: {
       email: email,
     },
   });
-  if (validEmail) {
+
+  if (user && user.state === true) {
     throw new Error("Email already exists");
   }
 };

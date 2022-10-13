@@ -35,7 +35,7 @@ router.post(
       min: 8,
     }),
     check("role").custom(validRoles),
-    check("email").custom(validEmailExists),
+    // check("email").custom(validEmailExists),
     validFields,
   ],
   createNewUser

@@ -3,7 +3,7 @@ import { customAlphabet } from "nanoid";
 import bcryptjs from "bcryptjs";
 
 import { idKeys } from "../keys/idKeys";
-import { User } from "../models/user.model";
+import { User, UserModel } from '../models/user.model';
 import Role from "../models/role.model";
 
 export const getAllRoles = async (req: Request, res: Response) => {
@@ -34,7 +34,7 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUsers = async (res: Response) => {
   try {
     const users = await User.findAll({
       where: {
@@ -51,17 +51,34 @@ export const getAllUsers = async (req: Request, res: Response) => {
 };
 
 export const createNewUser = async (req: Request, res: Response) => {
+  const { body } = req;
+  body.email = body.email.toLowerCase();
+  const findUser: UserModel | any = await User.findOne({
+    where: {
+      email: body.email,
+    },
+  });
+
+
+  if (findUser && findUser.state === false) {    
+    const user: UserModel | any = await User.findByPk(findUser.id);
+    findUser.state = true;
+    user.update(findUser);
+    return res.status(200).json({
+      user,
+      findUser
+    })
+  }
+
+
   try {
-    const { body } = req;
     const nanoid = customAlphabet(idKeys, 8);
     body.id = nanoid();
-    body.email = body.email.toLowerCase();
     const encryptPassword = bcryptjs.genSaltSync();
     body.password = bcryptjs.hashSync(body.password, encryptPassword);
     const user = await User.create(body);
-    await user.save();
-
-    res.json({
+    // await user.save();
+    res.status(200).json({
       msg: "User created successfully",
       user,
     });

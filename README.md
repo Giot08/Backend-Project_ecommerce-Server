@@ -34,6 +34,3 @@ $ tsc --watch
 $ npm i --save-dev @types/cors
 $ npm i --save-dev @types/bcryptjs
 $ npm i nanoid@3.3.4 #Versions up to 3.3.4 have incompatibilies with EMS
-
-
-New commit,
