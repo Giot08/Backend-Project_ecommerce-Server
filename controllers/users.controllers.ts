@@ -59,17 +59,13 @@ export const createNewUser = async (req: Request, res: Response) => {
     },
   });
 
-
   if (findUser && findUser.state === false) {    
-    const user: UserModel | any = await User.findByPk(findUser.id);
-    findUser.state = true;
-    user.update(findUser);
+    await findUser.update({state: true});
     return res.status(200).json({
-      user,
+      msg: "User created successfully - Update state",
       findUser
     })
   }
-
 
   try {
     const nanoid = customAlphabet(idKeys, 8);
@@ -77,9 +73,9 @@ export const createNewUser = async (req: Request, res: Response) => {
     const encryptPassword = bcryptjs.genSaltSync();
     body.password = bcryptjs.hashSync(body.password, encryptPassword);
     const user = await User.create(body);
-    // await user.save();
+    await user.save();
     res.status(200).json({
-      msg: "User created successfully",
+      msg: "User created successfully - Created",
       user,
     });
   } catch (error) {
