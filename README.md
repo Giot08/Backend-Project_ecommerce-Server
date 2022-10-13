@@ -1,5 +1,3 @@
-# UPDATE: This project is no longer building, Will start with a full javascript and python backend.
-
 # Node-backend-template
 
 """

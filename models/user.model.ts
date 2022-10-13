@@ -36,10 +36,10 @@ export const User = db.define("user", {
 
 export interface UserModel {
   id: string;
-  name:string;
-  email:string;
-  lastname:string;
+  name: string;
+  email: string;
+  lastname: string;
   password: string;
   state: boolean;
-  role:string;
+  role: string;
 }

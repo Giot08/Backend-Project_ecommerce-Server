@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import Role from "../models/role.model";
-import { User } from "../models/user.model";
+import { User, UserModel } from "../models/user.model";
 
 export const validFields = (
   req: Request,
@@ -61,13 +61,13 @@ export const validUser = async (
 ) => {
   try {
     const id = req.header("id");
-    const token = req.header("tkn");
-    const { uid } = jwt.verify(token, process.env.SECRET_JWT_KEY || "");
+    const token: string | any = req.header("tkn");
+    const { uid }: string | any = jwt.verify(token, process.env.SECRET_JWT_KEY || "");
 
     if (!id || !token)
       return res.status(404).json({ msg: "token or id not found" });
     if (id !== uid) return res.status(400).json({ msg: "Invalid info" });
-    const user = await User.findByPk(id);
+    const user: UserModel | any = await User.findByPk(uid || id);
     if (!user) return res.status(404).json({ msg: "User not found" });
     next();
   } catch (error) {
@@ -81,9 +81,12 @@ export const validAdminRole = async (
 ) => {
   try {
     const id = req.header("id");
-    const token = req.header("tkn");
-    const { uid } = jwt.verify(token, process.env.SECRET_JWT_KEY || "");
-    const user = await User.findByPk(uid || id);
+    const token: any = req.header("tkn");
+    const { uid }: string | any = jwt.verify(
+      token,
+      process.env.SECRET_JWT_KEY || ""
+      );
+    const user: UserModel | any = await User.findByPk(uid || id);
     if (user.role !== "admin_role")
       return res.status(401).json({ msg: "Unauthorized" });
     next();
