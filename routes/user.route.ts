@@ -1,13 +1,14 @@
 import { Router } from "express";
 import { check } from "express-validator";
+import { validFields } from "../middlewares/validData";
+import { validJWT } from "../middlewares/validToken";
 import {
-  validFields,
   validRoles,
   validEmailExists,
   validAdminRole,
-  validJWT,
   validUser,
-} from "../middlewares/validators";
+} from "../middlewares/validUser";
+
 import {
   getAllUsers,
   getUserById,
@@ -63,6 +64,10 @@ router.put(
   putUserEmail
 );
 router.put("/remove/", [validJWT, validUser], removeUser);
-router.delete("/destroy/:id",[validJWT, validUser, validAdminRole], destroyUser);
+router.delete(
+  "/destroy/:id",
+  [validJWT, validUser, validAdminRole],
+  destroyUser
+);
 
 export default router;

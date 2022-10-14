@@ -2,7 +2,8 @@ import { Router } from "express";
 import { check } from "express-validator";
 
 import { login } from '../controllers/auth.controllers';
-import { validFields } from '../middlewares/validators';
+import { validFields } from '../middlewares/validData';
+
 const router = Router();
 
 router.post("/login",[
