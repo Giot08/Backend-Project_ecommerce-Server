@@ -5,7 +5,7 @@ const Role = db.define("role", {
   role: {
     type: DataTypes.STRING,
     allowNull: false,
-    primaryKey: true,
+    primaryKey: false,
     defaultValue: "user_role",
   },
 });

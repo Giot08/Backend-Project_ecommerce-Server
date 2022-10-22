@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import userRoutes from "../routes/user.route";
 import authRoutes from "../routes/auth.route";
+import categoryRoutes from "../routes/category.route";
 import cors from "cors";
 import db from "../db/connection";
 
@@ -10,6 +11,7 @@ class Server {
   private paths = {
     users: "/api/user",
     auth: "/api/auth", 
+    category: "/category",
   };
 
   constructor() {
@@ -52,6 +54,7 @@ class Server {
   routes() {
     this.app.use(this.paths.users, userRoutes);
     this.app.use(this.paths.auth, authRoutes);
+    this.app.use(this.paths.category, categoryRoutes);
   }
 
   listen() {
