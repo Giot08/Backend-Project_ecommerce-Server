@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User, UserModel } from "../models/user.model";
+import { User, UserModel } from "../models/index.model";
 import bcryptjs from "bcryptjs";
 import generateJWT from "../helpers/generateJWT";
 

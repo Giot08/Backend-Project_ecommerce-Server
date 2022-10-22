@@ -4,7 +4,7 @@ import bcryptjs from "bcryptjs";
 
 import { idKeys } from "../keys/idKeys";
 import { User, UserModel } from '../models/user.model';
-import Role from "../models/role.model";
+import { Role } from "../models/role.model";
 
 export const getAllRoles = async (req: Request, res: Response) => {
   try {
