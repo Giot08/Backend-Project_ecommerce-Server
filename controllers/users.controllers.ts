@@ -2,9 +2,8 @@ import { Request, Response } from "express";
 import { customAlphabet } from "nanoid";
 import bcryptjs from "bcryptjs";
 
-import { idKeys } from "../keys/idKeys";
-import { User, UserModel } from '../models/user.model';
-import { Role } from "../models/role.model";
+import { idKeys } from "../keys/index.keys";
+import { User, UserModel, Role } from "../models/index.model";
 
 export const getAllRoles = async (req: Request, res: Response) => {
   try {
@@ -51,23 +50,23 @@ export const getAllUsers = async (res: Response) => {
 };
 
 export const createNewUser = async (req: Request, res: Response) => {
-  const { body } = req;
-  body.email = body.email.toLowerCase();
-  const findUser: UserModel | any = await User.findOne({
-    where: {
-      email: body.email,
-    },
-  });
-
-  if (findUser && findUser.state === false) {    
-    await findUser.update({state: true});
-    return res.status(200).json({
-      msg: "User created successfully - Update state",
-      findUser
-    })
-  }
-
   try {
+    const { body } = req;
+    body.email = body.email.toLowerCase();
+    const findUser: UserModel | any = await User.findOne({
+      where: {
+        email: body.email,
+      },
+    });
+
+    if (findUser && findUser.state === false) {
+      await findUser.update({ state: true });
+      return res.status(200).json({
+        msg: "User created successfully - Update state",
+        findUser,
+      });
+    }
+
     const nanoid = customAlphabet(idKeys, 8);
     body.id = nanoid();
     const encryptPassword = bcryptjs.genSaltSync();
@@ -86,16 +85,16 @@ export const createNewUser = async (req: Request, res: Response) => {
 };
 
 export const putUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const user = await User.findByPk(id);
-  const { body } = req;
-
-  if (!user) {
-    return res.status(404).json({
-      msg: "User not found",
-    });
-  }
   try {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+    const { body } = req;
+
+    if (!user) {
+      return res.status(404).json({
+        msg: "User not found",
+      });
+    }
     await user.update(body);
     res.json(user);
   } catch (error) {
@@ -106,16 +105,16 @@ export const putUser = async (req: Request, res: Response) => {
 };
 
 export const putUserEmail = async (req: Request, res: Response) => {
-  const id = req.header("id");
-  const user = await User.findByPk(id);
-  const { body } = req;
-
-  if (!user) {
-    return res.status(404).json({
-      msg: "User not found",
-    });
-  }
   try {
+    const id = req.header("id");
+    const user = await User.findByPk(id);
+    const { body } = req;
+
+    if (!user) {
+      return res.status(404).json({
+        msg: "User not found",
+      });
+    }
     await user.update(body);
     res.json(user);
   } catch (error) {
@@ -126,16 +125,16 @@ export const putUserEmail = async (req: Request, res: Response) => {
 };
 
 export const removeUser = async (req: Request, res: Response) => {
-  const id = req.header("id");
-  const user = await User.findByPk(id);
-  const { body } = req;
-  body.state = false;
-  if (!user) {
-    return res.status(404).json({
-      msg: "User not found",
-    });
-  }
   try {
+    const id = req.header("id");
+    const user = await User.findByPk(id);
+    const { body } = req;
+    body.state = false;
+    if (!user) {
+      return res.status(404).json({
+        msg: "User not found",
+      });
+    }
     await user.update(body);
     res.json({ msg: "User removed successfully", user });
   } catch (error) {
@@ -145,9 +144,9 @@ export const removeUser = async (req: Request, res: Response) => {
   }
 };
 export const destroyUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const user = await User.findByPk(id);
   try {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
     if (!user) {
       return res.status(404).json({
         msg: "User not found",

@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
-import { User, UserModel } from "../models/index.model";
 import bcryptjs from "bcryptjs";
 import generateJWT from "../helpers/generateJWT";
 
+import { User, UserModel } from "../models/index.model";
+
 export const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
   try {
+  const { email, password } = req.body;
     const user: UserModel | any = await User.findOne({
       where: {
         email: email,

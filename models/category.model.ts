@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import db from "../db/connection";
-import { User, UserModel } from './user.model';
 
 export interface CategoryModel {
   name: string;

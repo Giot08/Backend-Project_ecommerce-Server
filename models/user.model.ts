@@ -19,6 +19,10 @@ export const User = db.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  birthdate: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
   password: {
     type: DataTypes.STRING,
     allowNull: false,

@@ -1,4 +1,5 @@
 import { login } from "./auth.controllers";
+import { createNewCategory, getAllCategories, getCategory } from "./category.controllers";
 import {
   getAllRoles,
   getUserById,
@@ -20,4 +21,7 @@ export {
   putUserEmail,
   removeUser,
   destroyUser,
+  createNewCategory,
+  getAllCategories,
+  getCategory,
 };
